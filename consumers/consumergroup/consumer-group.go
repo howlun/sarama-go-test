@@ -480,14 +480,14 @@ func consumeMessages(c *GroupConsumerService, pc sarama.PartitionConsumer, lastO
 			lastOffset = &msg.Offset
 
 			messageReceived(msg)
-			/*
-				mh := c.messagehandlerList[topic]
-				if mh != nil && len(mh.Handlers) > 0 {
-					for _, handler := range mh.Handlers {
-						handler(msg.Value)
-					}
+
+			mh := c.messagehandlerList[msg.Topic]
+			if mh != nil && len(mh.Handlers) > 0 {
+				for _, handler := range mh.Handlers {
+					handler(msg.Value)
 				}
-			*/
+			}
+
 			if err := CommitUpto(c, msg); err != nil {
 				log.Printf("Error commiting offet:%s: %s\n", msg.Topic, err)
 				break
