@@ -6,7 +6,7 @@
 sudo useradd locationtracker -s /sbin/nologin -M
 
 # move service file
-#cd /tmp/Fleet-Location/deployment/dev
+cd /tmp/sarama-go-test/deployment/dev
 
 sudo cp locationtracker-processor.service /etc/systemd/system/
 sudo chmod 755 /etc/systemd/system/locationtracker-processor.service
@@ -14,7 +14,7 @@ sudo chmod 755 /etc/systemd/system/locationtracker-processor.service
 echo "service moved"
 
 # copy source code to go folder
-#cd /tmp/Fleet-Location
+cd /tmp/sarama-go-test
 rm -rf /home/howlun_par/go/src/github.com/howlun/sarama-go-test/*
 cp -r * /home/howlun_par/go/src/github.com/howlun/sarama-go-test/
 cd /home/howlun_par/go/src/github.com/howlun/sarama-go-test
