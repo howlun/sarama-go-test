@@ -1,0 +1,23 @@
+[Unit]
+Description=Location Tracker Processor Server
+ConditionPathExists=/home/howlun_par/go/src/github.com/howlun/sarama-go-test
+After=network.target
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+
+Restart=on-failure
+RestartSec=10
+
+WorkingDirectory=/home/howlun_par/go/src/github.com/howlun/sarama-go-test
+ExecStart=/usr/bin/sudo /home/howlun_par/go/src/github.com/howlun/sarama-go-test/sarama-go-test -m ng
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=locationtracker-processor
+
+[Install]
+WantedBy=multi-user.target
