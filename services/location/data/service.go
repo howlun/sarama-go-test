@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/iknowhtml/sarama-test/helpers"
-	"github.com/iknowhtml/sarama-test/services/location"
+	"github.com/howlun/sarama-go-test/helpers"
+	"github.com/howlun/sarama-go-test/services/location"
 )
 
 type RedisService interface {

@@ -5,9 +5,9 @@ import (
 	"log"
 	"time"
 
-	fleetSvc "github.com/iknowhtml/sarama-test/services/fleet/data"
-	"github.com/iknowhtml/sarama-test/services/location"
-	"github.com/iknowhtml/sarama-test/services/location/data"
+	fleetSvc "github.com/howlun/sarama-go-test/services/fleet/data"
+	"github.com/howlun/sarama-go-test/services/location"
+	"github.com/howlun/sarama-go-test/services/location/data"
 )
 
 type LocationService interface {

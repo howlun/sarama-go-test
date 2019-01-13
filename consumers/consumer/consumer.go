@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/iknowhtml/sarama-test/consumers"
+	"github.com/howlun/sarama-go-test/consumers"
 	sarama "gopkg.in/Shopify/sarama.v1"
 )
 

@@ -3,7 +3,7 @@ package data
 import (
 	"log"
 
-	"github.com/iknowhtml/sarama-test/services/fleet"
+	"github.com/howlun/sarama-go-test/services/fleet"
 	"github.com/parnurzeal/gorequest"
 )
 

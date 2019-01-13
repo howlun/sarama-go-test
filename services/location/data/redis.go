@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/iknowhtml/sarama-test/services/location"
+	"github.com/howlun/sarama-go-test/services/location"
 )
 
 var p *redis.Pool

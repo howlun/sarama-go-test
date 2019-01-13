@@ -5,15 +5,15 @@ import (
 	"log"
 	"sync"
 
-	consumers "github.com/iknowhtml/sarama-test/consumers"
-	ng_processor "github.com/iknowhtml/sarama-test/consumers/consumer"
-	g_processor "github.com/iknowhtml/sarama-test/consumers/consumergroup"
-	"github.com/iknowhtml/sarama-test/events"
-	jobEvent "github.com/iknowhtml/sarama-test/events/job"
-	locationEvent "github.com/iknowhtml/sarama-test/events/location"
-	fleetDataSvc "github.com/iknowhtml/sarama-test/services/fleet/data"
-	locationSvc "github.com/iknowhtml/sarama-test/services/location/business"
-	locationDataSvc "github.com/iknowhtml/sarama-test/services/location/data"
+	consumers "github.com/howlun/sarama-go-test/consumers"
+	ng_processor "github.com/howlun/sarama-go-test/consumers/consumer"
+	g_processor "github.com/howlun/sarama-go-test/consumers/consumergroup"
+	"github.com/howlun/sarama-go-test/events"
+	jobEvent "github.com/howlun/sarama-go-test/events/job"
+	locationEvent "github.com/howlun/sarama-go-test/events/location"
+	fleetDataSvc "github.com/howlun/sarama-go-test/services/fleet/data"
+	locationSvc "github.com/howlun/sarama-go-test/services/location/business"
+	locationDataSvc "github.com/howlun/sarama-go-test/services/location/data"
 )
 
 var (

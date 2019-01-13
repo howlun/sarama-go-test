@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/iknowhtml/sarama-test/helpers"
-	"github.com/iknowhtml/sarama-test/services/fleet"
+	"github.com/howlun/sarama-go-test/helpers"
+	"github.com/howlun/sarama-go-test/services/fleet"
 )
 
 type HTTPService interface {

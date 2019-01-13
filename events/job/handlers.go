@@ -3,8 +3,8 @@ package job
 import (
 	"log"
 
-	"github.com/iknowhtml/sarama-test/services/location"
-	"github.com/iknowhtml/sarama-test/services/location/business"
+	"github.com/howlun/sarama-go-test/services/location"
+	"github.com/howlun/sarama-go-test/services/location/business"
 )
 
 type JobHandlerService interface {
