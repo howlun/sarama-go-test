@@ -235,7 +235,7 @@ func (c *GroupConsumerService) Subscribe() error {
 
 func topicListConsumer(c *GroupConsumerService, topics []string) {
 	defer c.Wg.Done()
-	
+
 	for {
 		select {
 		case <-c.stopper:
@@ -401,56 +401,102 @@ func partitionConsumer(c *GroupConsumerService, topic string, partition int32, e
 	}
 	defer consumer.Close()
 
-	err = nil
 	var lastOffset int64 = -1 // aka unknown
-partitionConsumerLoop:
-	for {
-		select {
-		case <-stopper:
-			break partitionConsumerLoop
+	consumeMessages(c, consumer, &lastOffset, stopper)
 
-		case err := <-consumer.Errors():
-			log.Printf("Error consuming message: %v\n", err)
+	/*
+			err = nil
+
+		partitionConsumerLoop:
 			for {
+				log.Printf("Consuming partition...\n")
 				select {
-				case errors <- err:
-					continue partitionConsumerLoop
-
 				case <-stopper:
+					log.Printf("Error consuming partition: Stopper triggered\n")
 					break partitionConsumerLoop
+
+				case err := <-consumer.Errors():
+					log.Printf("Error consuming message: %v\n", err)
+
+					for {
+						select {
+						case errors <- err:
+							continue partitionConsumerLoop
+
+						case <-stopper:
+							break partitionConsumerLoop
+						}
+					}
+
+				case msg := <-consumer.Messages():
+					lastOffset = msg.Offset
+
+					messageReceived(msg)
+
+
+						mh := c.messagehandlerList[topic]
+						if mh != nil && len(mh.Handlers) > 0 {
+							for _, handler := range mh.Handlers {
+								handler(msg.Value)
+							}
+						}
+
+					if err := CommitUpto(c, msg); err != nil {
+						log.Printf("Error commiting offet:%s: %s\n", topic, err)
+						break partitionConsumerLoop
+					}
+
+
+					select {
+					case <-stopper:
+						break partitionConsumerLoop
+					}
+
 				}
+
 			}
-
-		case msg := <-consumer.Messages():
-			lastOffset = msg.Offset
-
-			messageReceived(msg)
-			mh := c.messagehandlerList[topic]
-			if mh != nil && len(mh.Handlers) > 0 {
-				for _, handler := range mh.Handlers {
-					handler(msg.Value)
-				}
-			}
-
-			if err := CommitUpto(c, msg); err != nil {
-				log.Printf("Error commiting offet:%s: %s\n", topic, err)
-				break partitionConsumerLoop
-			}
-
-			select {
-			case <-stopper:
-				break partitionConsumerLoop
-			}
-		}
-	}
-
+	*/
 	log.Printf("%s/%d :: Stopping partition consumer at offset %d\n", topic, partition, lastOffset)
 	if err := c.offsetManager.FinalizePartition(topic, partition, lastOffset, c.Config.Offsets.ProcessingTimeout); err != nil {
 		log.Printf("%s/%d :: %s\n", topic, partition, err)
 	}
+
+}
+
+func consumeMessages(c *GroupConsumerService, pc sarama.PartitionConsumer, lastOffset *int64, stopper <-chan struct{}) {
+	var err error
+	//var lastOffset int64 = -1 // aka unknown
+
+	for {
+		select {
+		case <-stopper:
+			log.Printf("Error consuming partition: Stopper triggered\n")
+			break
+		case err = <-pc.Errors():
+			log.Printf("Error consuming message: %v\n", err)
+			break
+		case msg := <-pc.Messages():
+
+			lastOffset = &msg.Offset
+
+			messageReceived(msg)
+			/*
+				mh := c.messagehandlerList[topic]
+				if mh != nil && len(mh.Handlers) > 0 {
+					for _, handler := range mh.Handlers {
+						handler(msg.Value)
+					}
+				}
+			*/
+			if err := CommitUpto(c, msg); err != nil {
+				log.Printf("Error commiting offet:%s: %s\n", msg.Topic, err)
+				break
+			}
+		}
+	}
 }
 
 func messageReceived(message *sarama.ConsumerMessage) {
-	log.Printf("Message: %v\n", message)
+	log.Printf("Message Topic=%s Value=%s Offset=%d\n", message.Topic, message.Value, message.Offset)
 	//log.Printf("Message Key: %s - Value: %s\n", message.Key, message.Value)
 }
