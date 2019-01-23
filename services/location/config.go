@@ -1,5 +1,5 @@
 package location
 
 const (
-	REMOTEADDR string = "35.185.186.230:9851"
+	REMOTEADDR string = "127.0.0.1:9851"
 )
