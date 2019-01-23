@@ -14,10 +14,11 @@ sudo chmod 755 /etc/systemd/system/locationtracker-processor.service
 echo "service moved"
 
 # copy source code to go folder
+mkdir -p /home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test
 cd /tmp/sarama-go-test
-rm -rf /home/howlun_par/go/src/github.com/howlun/sarama-go-test/*
-cp -r * /home/howlun_par/go/src/github.com/howlun/sarama-go-test/
-cd /home/howlun_par/go/src/github.com/howlun/sarama-go-test
+rm -rf /home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test/*
+cp -r * /home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test/
+cd /home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test
 go build
 
 echo "source build"

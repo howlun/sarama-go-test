@@ -1,6 +1,6 @@
 [Unit]
 Description=Location Tracker Processor Server
-ConditionPathExists=/home/howlun_par/go/src/github.com/howlun/sarama-go-test
+ConditionPathExists=/home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test
 After=network.target
  
 [Service]
@@ -12,8 +12,8 @@ LimitNOFILE=1024
 Restart=on-failure
 RestartSec=10
 
-WorkingDirectory=/home/howlun_par/go/src/github.com/howlun/sarama-go-test
-ExecStart=/usr/bin/sudo /home/howlun_par/go/src/github.com/howlun/sarama-go-test/sarama-go-test -m g -group TCSVN00096N_e11cb323a32d41628333fc5281c2ce6e
+WorkingDirectory=/home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test
+ExecStart=/usr/bin/sudo /home/rsa-key-20190103/go/src/github.com/howlun/sarama-go-test/sarama-go-test -m g -group TCSVN00096N_e11cb323a32d41628333fc5281c2ce6e
 
 StandardOutput=syslog
 StandardError=syslog
