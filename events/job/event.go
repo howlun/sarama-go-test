@@ -2,6 +2,24 @@ package job
 
 import "encoding/json"
 
+type DriverUpdatedEventCodec struct {
+	DriverID            int32 `json:"driverId"`
+	ProviderID          int32 `json:"providerId"`
+	RegisteredStatusID  int32 `json:"status"`
+	Priority            int32 `json:"priority"`
+	ActiveServiceID     int32 `json:"activeServiceId"`
+	ActiveServiceTypeID int32 `json:"activeServiceTypeId"`
+}
+
+func (c *DriverUpdatedEventCodec) Encode(value interface{}) ([]byte, error) {
+	return json.Marshal(value)
+}
+
+func (c *DriverUpdatedEventCodec) Decode(data []byte) (interface{}, error) {
+	var m DriverUpdatedEventCodec
+	return &m, json.Unmarshal(data, &m)
+}
+
 type DriverAssignedEventCodec struct {
 	DriverID int32 `json:"driverId"`
 	JobID    int32 `json:"jobId"`

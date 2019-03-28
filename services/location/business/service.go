@@ -11,6 +11,7 @@ import (
 )
 
 type LocationService interface {
+	SetServiceAndServiceType(driverID int32, activeserviceid int32, activeservicetypeid int32) (*location.SetFieldResponseObject, error)
 	SetAvailabilityBusy(driverID int32, jobID int32) (*location.SetFieldResponseObject, error)
 	SetDriverJobCompleteOrCancel(driverID int32, jobID int32) (*location.SetFieldResponseObject, error)
 	SetAvailability(driverID int32, curlocLat float32, curlocLng float32, available location.NearbySearch_Availability) (*location.SetObjectResponseObject, error)
@@ -142,7 +143,51 @@ func (s *locationService) SetDriverJobCompleteOrCancel(driverID int32, jobID int
 		return nil, errors.New(res.Error)
 	}
 
-	log.Printf("Driver Job Compelte or Cancel updated: %v\n", res.Ok)
+	log.Printf("Driver Job Complete or Cancel updated: %v\n", res.Ok)
+	return res, nil
+}
+
+// Update Driver service and service type
+// if Driver object not found, throw error message
+func (s *locationService) SetServiceAndServiceType(driverID int32, activeserviceid int32, activeservicetypeid int32) (*location.SetFieldResponseObject, error) {
+	// get current driver status
+	driverExistObj, err := s.dataService.GetObject(string(location.Object_Collection_Fleet), driverID)
+	if err != nil {
+		return nil, err
+	}
+
+	// check if response object is empty
+	if driverExistObj == nil {
+		return nil, ErrRetriveDriverObject
+	}
+
+	// check if driver object found
+	if driverExistObj.Ok != true {
+		return nil, ErrRetriveDriverObjectNotFound
+	}
+
+	timeNow := time.Now().Unix()
+	fields := location.FieldsMapProperties{}
+
+	// setup param object
+	fields = location.FieldsMapProperties{
+		"activeserviceid":     activeserviceid,
+		"activeservicetypeid": activeservicetypeid,
+		"lastupdatedtime":     timeNow,
+	}
+
+	// Update object
+	res, err := s.dataService.SetField(string(location.Object_Collection_Fleet), driverID, fields)
+	if err != nil {
+		return nil, err
+	}
+
+	// check if ok is false
+	if res.Ok == false {
+		return nil, errors.New(res.Error)
+	}
+
+	log.Printf("Driver service and service type updated: %v\n", res.Ok)
 	return res, nil
 }
 

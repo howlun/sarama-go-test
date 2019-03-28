@@ -7,7 +7,16 @@ import (
 	"github.com/howlun/sarama-go-test/services/location/business"
 )
 
+type DriverRegistrationStatus int32
+
+const (
+	DriverRegistrationStatus_Registered    DriverRegistrationStatus = 1
+	DriverRegistrationStatus_Terminated    DriverRegistrationStatus = 2
+	DriverRegistrationStatus_NotRegistered DriverRegistrationStatus = 0
+)
+
 type JobHandlerService interface {
+	DriverUpdatedHandler(data []byte)
 	DriverAssignedHandler(data []byte)
 	DriverChangedHandler(data []byte)
 	DriverAvailChangedHandler(data []byte)
@@ -52,6 +61,52 @@ func (s *jobHandlerService) DriverAssignedHandler(data []byte) {
 		}
 
 		log.Printf("Job/DriverAssigned: Success: %v\n", res)
+
+		// TODO send notification to frontend
+		//}
+	}
+}
+
+func (s *jobHandlerService) DriverUpdatedHandler(data []byte) {
+	log.Printf("Handling Driver Updated message=%v\n", data)
+
+	//var ok bool
+	eventData := &DriverUpdatedEventCodec{}
+	v, err := eventData.Decode(data)
+	if err != nil {
+		log.Printf("Error decoding Driver Updated message: %v\n", err)
+	} else {
+		log.Printf("Successfully decoded Driver Updated message=%v\n", v)
+		eventData = v.(*DriverUpdatedEventCodec)
+		//if eventData, ok = v.(DriverUpdatedEventCodec); ok {
+		log.Printf("Process Driver Updated message=%s\n", eventData)
+
+		// TODO push data to channel
+
+		// check Driver registration status
+		if eventData.RegisteredStatusID != int32(DriverRegistrationStatus_Registered) {
+			// if not equal to registered, quit processing
+			log.Printf("Not processing driver with status=%d\n", eventData.RegisteredStatusID)
+			return
+		}
+
+		// Update Driver active service and active service type
+		res, err := s.locationService.SetServiceAndServiceType(eventData.DriverID, eventData.ActiveServiceID, eventData.ActiveServiceTypeID)
+		if err != nil {
+			log.Printf("Error: driverUpdated: %v\n", err.Error())
+
+			// TODO send notification to frontend
+			return
+		}
+
+		if res.Ok != true {
+			log.Printf("Error: driverUpdated: update driver failed: %s\n", res.Error)
+
+			// TODO send notification to frontend
+			return
+		}
+
+		log.Printf("Job/Processor/driverUpdated: Success: %v\n", res)
 
 		// TODO send notification to frontend
 		//}

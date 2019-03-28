@@ -29,8 +29,8 @@ func main() {
 	var err error
 	var consumer consumers.ConsumerService
 	//brokers := []string{"35.240.167.230:9092"}
-	brokers := []string{"35.237.203.189:9092", "35.237.203.189:9093", "35.237.203.189:9094"}
-	zookeepers := []string{"35.237.203.189:2181"}
+	brokers := []string{"34.73.77.212:9092", "34.73.77.212:9093", "34.73.77.212:9094"}
+	zookeepers := []string{"34.73.77.212:2181"}
 	//topics := []string{"ping", "DRIVERASSIGN"}
 	_, _ = locationEvent.NewLocationHandlerService()
 	_, _ = fleetDataSvc.NewClient()
@@ -92,6 +92,7 @@ func main() {
 		log.Fatalln("Failed to instantiate Job Event Handler Service: ", err)
 	}
 	consumer.RegisterMessageHandler(string(events.DriverAssignedEvent), jobEventService.DriverAssignedHandler)
+	consumer.RegisterMessageHandler(string(events.DriverUpdatedEvent), jobEventService.DriverUpdatedHandler)
 	consumer.RegisterMessageHandler(string(events.DriverChangedEvent), jobEventService.DriverChangedHandler)
 	consumer.RegisterMessageHandler(string(events.DriverAvailabilityChangedEvent), jobEventService.DriverAvailChangedHandler)
 	consumer.RegisterMessageHandler(string(events.JobCompletedEvent), jobEventService.JobCompletedHandler)

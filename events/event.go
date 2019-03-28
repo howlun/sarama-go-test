@@ -12,6 +12,7 @@ const (
 	DriverArrivedEvent             EventName = "HKDRIVERARRIVED"
 	DriverAssignedEvent            EventName = "DRIVERASSIGN"
 	DriverChangedEvent             EventName = "DRIVERCHANGED"
+	DriverUpdatedEvent             EventName = "UPDATEFLEET"
 	JobCompletedEvent              EventName = "JOBCOMPLETED"
 	JobCancelledEvent              EventName = "JOBCANCELLED"
 	DriverAvailabilityChangedEvent EventName = "DRIVERAVAILABILITYCHANGED"
